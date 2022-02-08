@@ -1,57 +1,56 @@
 package ru.gpb.school.moneytransfer.model;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 
 @Entity
 @Table(name = "transfer", schema = "public", catalog = "Transfer")
 public class Transfer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "Id", nullable = false, length = -1)
-    private String id;
+    @Column(name = "Id", nullable = false)
+    private int id;
     @Basic
-    @Column(name = "sender_score", nullable = true, length = -1)
-    private String senderScore;
+    @Column(name = "sender_score", nullable = true, precision = 0)
+    private Long senderScore;
     @Basic
-    @Column(name = "recipient_score", nullable = true, length = -1)
-    private String recipientScore;
+    @Column(name = "recipient_score", nullable = true, precision = 0)
+    private Long recipientScore;
     @Basic
     @Column(name = "amount_of_money", nullable = true, precision = 0)
-    private BigDecimal amountOfMoney;
+    private Float amountOfMoney;
     @Basic
     @Column(name = "date_of_transfer", nullable = true)
     private Object dateOfTransfer;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getSenderScore() {
+    public Long getSenderScore() {
         return senderScore;
     }
 
-    public void setSenderScore(String senderScore) {
+    public void setSenderScore(Long senderScore) {
         this.senderScore = senderScore;
     }
 
-    public String getRecipientScore() {
+    public Long getRecipientScore() {
         return recipientScore;
     }
 
-    public void setRecipientScore(String recipientScore) {
+    public void setRecipientScore(Long recipientScore) {
         this.recipientScore = recipientScore;
     }
 
-    public BigDecimal getAmountOfMoney() {
+    public Float getAmountOfMoney() {
         return amountOfMoney;
     }
 
-    public void setAmountOfMoney(BigDecimal amountOfMoney) {
+    public void setAmountOfMoney(Float amountOfMoney) {
         this.amountOfMoney = amountOfMoney;
     }
 
@@ -70,7 +69,7 @@ public class Transfer {
 
         Transfer that = (Transfer) o;
 
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (id != that.id) return false;
         if (senderScore != null ? !senderScore.equals(that.senderScore) : that.senderScore != null) return false;
         if (recipientScore != null ? !recipientScore.equals(that.recipientScore) : that.recipientScore != null)
             return false;
@@ -84,7 +83,7 @@ public class Transfer {
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
+        int result = id;
         result = 31 * result + (senderScore != null ? senderScore.hashCode() : 0);
         result = 31 * result + (recipientScore != null ? recipientScore.hashCode() : 0);
         result = 31 * result + (amountOfMoney != null ? amountOfMoney.hashCode() : 0);

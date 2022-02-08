@@ -15,19 +15,21 @@ public class TransferService {
     public TransferDTO createTransferDTO(Transfer transfer){
         TransferDTO transferDTO = new TransferDTO();
         transferDTO.setAmountOfMoney(transfer.getAmountOfMoney());
-        transferDTO.setRecipientScore(transfer.getRecipientScore());
-        transferDTO.setSenderScore(transfer.getSenderScore());
+        transferDTO.setRecipientAccount(transfer.getRecipientScore());
+        transferDTO.setSenderAccount(transfer.getSenderScore());
         return transferDTO;
     }
     public RecipientDTO createRecipientDTO(Transfer transfer){
         RecipientDTO recipientDTO = new RecipientDTO();
-        recipientDTO.setRecipientScore(transfer.getRecipientScore());
+        recipientDTO.setTransferId(transfer.getId());
+        recipientDTO.setRecipientAccount(transfer.getRecipientScore());
         recipientDTO.setAmountOfMoney(transfer.getAmountOfMoney());
         return recipientDTO;
     }
     public SenderDTO createSenderDTO(Transfer transfer){
         SenderDTO senderDTO = new SenderDTO();
-        senderDTO.setSenderScore(transfer.getSenderScore());
+        senderDTO.setTransferId(transfer.getId());
+        senderDTO.setSenderAccount(transfer.getSenderScore());
         senderDTO.setAmountOfMoney(transfer.getAmountOfMoney());
         return senderDTO;
     }
