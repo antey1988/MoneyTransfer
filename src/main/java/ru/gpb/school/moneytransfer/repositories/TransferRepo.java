@@ -8,9 +8,8 @@ import java.util.Optional;
 
 public interface TransferRepo extends JpaRepository<Transfer, String> {
     List<Transfer>findAll();
-    Optional<Transfer> findById(String Id);
-    Optional<Transfer>findBySenderScoreAndRecipientScore(String score);
-    Optional<Transfer>findBySenderScore(String senderScore);
-    Optional<Transfer>findByRecipientScore(String RecipientScore);
+    Optional<Transfer> findById(int id);
+    Optional<Transfer>findBySenderScore(Long senderScore);
+    Optional<Transfer>findByRecipientScore(Long RecipientScore);
 
 }

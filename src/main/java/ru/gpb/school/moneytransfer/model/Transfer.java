@@ -1,6 +1,7 @@
 package ru.gpb.school.moneytransfer.model;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "transfer", schema = "public", catalog = "Transfer")
@@ -20,7 +21,7 @@ public class Transfer {
     private Float amountOfMoney;
     @Basic
     @Column(name = "date_of_transfer", nullable = true)
-    private Object dateOfTransfer;
+    private LocalDateTime dateOfTransfer;
 
     public int getId() {
         return id;
@@ -54,11 +55,11 @@ public class Transfer {
         this.amountOfMoney = amountOfMoney;
     }
 
-    public Object getDateOfTransfer() {
+    public LocalDateTime getDateOfTransfer() {
         return dateOfTransfer;
     }
 
-    public void setDateOfTransfer(Object dateOfTransfer) {
+    public void setDateOfTransfer(LocalDateTime dateOfTransfer) {
         this.dateOfTransfer = dateOfTransfer;
     }
 
