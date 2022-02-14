@@ -6,7 +6,10 @@ import ru.gpb.school.moneytransfer.dto.TransferDto;
 import ru.gpb.school.moneytransfer.model.Transfer;
 import ru.gpb.school.moneytransfer.repositories.TransferRepo;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,8 +31,16 @@ public class TransferService {
     }
 
 
-    public List<Transfer> findTransfersBySenderId(String id){
+    public List<Transfer> findTransfersByRecipientAccount(String id){
         return transferRepo.findAllByRecipientAccount(id);
+    }
+
+    public List<Transfer> findTransfersBetween(LocalDateTime start, LocalDateTime end){
+        return transferRepo.findByDateTimeGreaterThanAndDateTimeLessThan(start, end);
+    }
+
+    public List<Transfer> findTransfersBySenderAccount(String id){
+        return transferRepo.findAllBySenderAccount(id);
     }
 
     public Transfer makeTransfer(TransferDto transferDto){
