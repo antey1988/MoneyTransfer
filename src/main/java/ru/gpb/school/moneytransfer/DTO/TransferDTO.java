@@ -1,7 +1,6 @@
 package ru.gpb.school.moneytransfer.dto;
 
 import lombok.Data;
-import lombok.ToString;
 
 @Data
 public class TransferDto {
