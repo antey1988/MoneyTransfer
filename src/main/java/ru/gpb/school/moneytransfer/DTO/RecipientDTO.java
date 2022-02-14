@@ -1,10 +1,10 @@
-package ru.gpb.school.moneytransfer.DTO;
+package ru.gpb.school.moneytransfer.dto;
 
 import lombok.Data;
 
 @Data
 public class RecipientDTO {
-    public int transferId;
-    public Long recipientAccount;
+    public Long transferId;
+    public String recipientAccount;
     private Float amountOfMoney;
 }
