@@ -4,11 +4,10 @@ import lombok.Data;
 import lombok.ToString;
 
 @Data
-public class TransferDTO {
-    public Long transferId;
-    public String senderAccount;
-    public String recipientAccount;
-    public Float amountOfMoney;
+public class TransferDto {
+    private String from;
+    private String to;
+    private Float amount;
 }
 
 
