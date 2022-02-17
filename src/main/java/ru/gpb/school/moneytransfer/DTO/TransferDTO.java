@@ -1,7 +1,6 @@
 package ru.gpb.school.moneytransfer.dto;
 
 import lombok.Data;
-import lombok.ToString;
 
 @Data
 public class TransferDto {
@@ -9,6 +8,4 @@ public class TransferDto {
     private String to;
     private Float amount;
 }
-
-
 

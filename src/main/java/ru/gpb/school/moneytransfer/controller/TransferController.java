@@ -2,11 +2,16 @@ package ru.gpb.school.moneytransfer.controller;
 
 import org.apache.catalina.filters.ExpiresFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.gpb.school.moneytransfer.dto.TransferDto;
+import ru.gpb.school.moneytransfer.exceptions.TransferException;
 import ru.gpb.school.moneytransfer.model.Transfer;
-import ru.gpb.school.moneytransfer.service.TransferService;
+import ru.gpb.school.moneytransfer.service.TransferServiceImpl;
 
+import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -15,27 +20,26 @@ import java.util.List;
 @RestController
 public class TransferController {
 
-    private final TransferService transferService;
+    private final TransferServiceImpl transferServiceImpl;
 
     @Autowired
-    public TransferController(TransferService transferService){
-        this.transferService = transferService;
+    public TransferController(TransferServiceImpl transferServiceImpl){
+        this.transferServiceImpl = transferServiceImpl;
     }
 
     @GetMapping("/getAll")
     public List<Transfer> getAll(){
-        return transferService.findAll();
+        return transferServiceImpl.findAll();
     }
 
     @GetMapping("/history/recipient/{id}")
     public List<Transfer> getTransferByRepipient(@PathVariable String id){
-        return transferService.findTransfersByRecipientAccount(id);
+        return transferServiceImpl.findTransfersByRecipientAccount(id);
     }
 
-
-    @GetMapping("/history/sender/{id}")
+    @GetMapping(value = "/history/sender/{id}")
     public List<Transfer> getTransfersBySender(@PathVariable String id){
-        return transferService.findTransfersBySenderAccount(id);
+        return transferServiceImpl.findTransfersBySenderAccount(id);
     }
 
     @GetMapping("/getAll/{date}")
@@ -51,18 +55,17 @@ public class TransferController {
              year = Integer.parseInt(params[2]);
              localDate = LocalDate.of(year, month, day);
         }catch (Exception e){
-            return transferService.findAll();
+            return transferServiceImpl.findAll();
         }
         LocalDateTime start = LocalDateTime.of(localDate, LocalTime.MIN);
         LocalDateTime end = LocalDateTime.of(localDate, LocalTime.MAX);
-        return transferService.findTransfersBetween(start, end);
+        return transferServiceImpl.findTransfersBetween(start, end);
     }
 
     @PostMapping("/save")
-    public int saving(@RequestBody TransferDto transferDto){
-        Transfer transfer = transferService.makeTransfer(transferDto);
-        System.out.println(transfer);
-        transferService.saveTransfer(transfer);
+    public int saving(@RequestBody TransferDto transferDto) throws TransferException {
+        transferServiceImpl.makeTransfer(transferDto);
+        //transferServiceImpl.saveTransfer(transfer);
 
         return ExpiresFilter.XHttpServletResponse.SC_OK;
     }
