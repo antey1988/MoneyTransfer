@@ -2,67 +2,65 @@ package ru.gpb.school.moneytransfer.controller;
 
 import org.apache.catalina.filters.ExpiresFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import ru.gpb.school.moneytransfer.dto.TransferDto;
 import ru.gpb.school.moneytransfer.model.Transfer;
 import ru.gpb.school.moneytransfer.service.TransferService;
 
-import java.time.LocalDate;
+import javax.transaction.Transactional;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 public class TransferController {
 
     private final TransferService transferService;
 
-    @Autowired
     public TransferController(TransferService transferService){
         this.transferService = transferService;
     }
 
-    @GetMapping("/getAll")
+    @GetMapping("/")
     public List<Transfer> getAll(){
         return transferService.findAll();
     }
 
-    @GetMapping("/history/recipient/{id}")
-    public List<Transfer> getTransferByRepipient(@PathVariable String id){
-        return transferService.findTransfersByRecipientAccount(id);
+    @GetMapping("/transfers-to-client")
+    public List<Transfer> getTransferByRecipient(String account){
+        return transferService.findTransfersByRecipientAccount(account);
     }
 
 
-    @GetMapping("/history/sender/{id}")
-    public List<Transfer> getTransfersBySender(@PathVariable String id){
-        return transferService.findTransfersBySenderAccount(id);
+    @GetMapping("/transfers-from-client")
+    public List<Transfer> getTransfersBySender(String account){
+        return transferService.findTransfersBySenderAccount(account);
     }
 
-    @GetMapping("/getAll/{date}")
-    public List<Transfer> getTransfersByDate(@PathVariable String date){
-        String[] params = date.split("-");
-        int day;
-        int month;
-        int year;
-        LocalDate localDate;
-        try {
-             day = Integer.parseInt(params[0]);
-             month = Integer.parseInt(params[1]);
-             year = Integer.parseInt(params[2]);
-             localDate = LocalDate.of(year, month, day);
-        }catch (Exception e){
-            return transferService.findAll();
-        }
-        LocalDateTime start = LocalDateTime.of(localDate, LocalTime.MIN);
-        LocalDateTime end = LocalDateTime.of(localDate, LocalTime.MAX);
+    @GetMapping("/transfers-between")
+    public List<Transfer> getTransfersByDate(
+            @DateTimeFormat(pattern = "dd-MM-yyyy:HH:mm:ss") LocalDateTime start,
+            @DateTimeFormat(pattern = "dd-MM-yyyy:HH:mm:ss") LocalDateTime end
+            ){
         return transferService.findTransfersBetween(start, end);
     }
 
-    @PostMapping("/save")
-    public int saving(@RequestBody TransferDto transferDto){
-        Transfer transfer = transferService.makeTransfer(transferDto);
-        System.out.println(transfer);
+    @Transactional(rollbackOn = {SQLException.class})
+    @PostMapping("/make-transfer")
+    public int saving(@RequestBody TransferDto transferDto) throws SQLException {
+        Transfer transfer = transferService.dtoToTransferEntity(transferDto);
         transferService.saveTransfer(transfer);
+
+        if(transfer.getAmountOfMoney() == 0){
+            throw new SQLException();
+        }
+
+        /*
+        *   Requests to another services
+        *   happen here
+        * */
 
         return ExpiresFilter.XHttpServletResponse.SC_OK;
     }

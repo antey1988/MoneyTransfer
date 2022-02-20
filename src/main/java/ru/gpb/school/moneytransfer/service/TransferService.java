@@ -43,7 +43,7 @@ public class TransferService {
         return transferRepo.findAllBySenderAccount(id);
     }
 
-    public Transfer makeTransfer(TransferDto transferDto){
+    public Transfer dtoToTransferEntity(TransferDto transferDto){
         return Transfer.builder()
                 .amountOfMoney(transferDto.getAmount())
                 .senderAccount(transferDto.getFrom())
