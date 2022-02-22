@@ -1,6 +1,7 @@
 package ru.gpb.school.moneytransfer.model;
 
 import lombok.*;
+import ru.gpb.school.moneytransfer.model.type.TransferType;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -20,4 +21,5 @@ public class Transfer {
     private String recipientAccount;
     private Float amountOfMoney;
     private LocalDateTime dateTime;
+    private TransferType transferType;
 }

@@ -1,10 +1,11 @@
 package ru.gpb.school.moneytransfer.controller;
 
 import org.apache.catalina.filters.ExpiresFilter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
+import ru.gpb.school.moneytransfer.dto.ReplenishmentDto;
 import ru.gpb.school.moneytransfer.dto.TransferDto;
+import ru.gpb.school.moneytransfer.dto.WithdrawalDto;
 import ru.gpb.school.moneytransfer.model.Transfer;
 import ru.gpb.school.moneytransfer.service.TransferService;
 
@@ -12,7 +13,6 @@ import javax.transaction.Transactional;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @RestController
 public class TransferController {
@@ -49,20 +49,28 @@ public class TransferController {
 
     @Transactional(rollbackOn = {SQLException.class})
     @PostMapping("/make-transfer")
-    public int saving(@RequestBody TransferDto transferDto) throws SQLException {
-        Transfer transfer = transferService.dtoToTransferEntity(transferDto);
+    public int saving(@RequestBody TransferDto transferDto){
+        Transfer transfer = transferService.transferDtoToTransferEntity(transferDto);
         transferService.saveTransfer(transfer);
-
-        if(transfer.getAmountOfMoney() == 0){
-            throw new SQLException();
-        }
-
-        /*
-        *   Requests to another services
-        *   happen here
-        * */
 
         return ExpiresFilter.XHttpServletResponse.SC_OK;
     }
 
+    @Transactional(rollbackOn = {SQLException.class})
+    @PostMapping("/make-withdrawal")
+    public int saving(@RequestBody WithdrawalDto withdrawalDto){
+        Transfer transfer = transferService.withdrawalDtoToTransferEntity(withdrawalDto);
+        transferService.saveTransfer(transfer);
+
+        return ExpiresFilter.XHttpServletResponse.SC_OK;
+    }
+
+    @Transactional(rollbackOn = {SQLException.class})
+    @PostMapping("/make-replenishment")
+    public int saving(@RequestBody ReplenishmentDto replenishmentDto){
+        Transfer transfer = transferService.replenishmentDtoToTransferEntity(replenishmentDto);
+        transferService.saveTransfer(transfer);
+
+        return ExpiresFilter.XHttpServletResponse.SC_OK;
+    }
 }
