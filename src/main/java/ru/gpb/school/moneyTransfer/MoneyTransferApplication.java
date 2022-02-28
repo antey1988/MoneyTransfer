@@ -1,4 +1,4 @@
-package ru.gpb.school.moneytransfer;
+package ru.gpb.school.moneyTransfer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

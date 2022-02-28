@@ -1,4 +1,4 @@
-package ru.gpb.school.moneytransfer.Dto;
+package ru.gpb.school.moneyTransfer.Dto;
 
 import lombok.Data;
 
