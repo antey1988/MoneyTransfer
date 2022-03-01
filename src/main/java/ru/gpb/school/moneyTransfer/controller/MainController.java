@@ -73,7 +73,7 @@ public class MainController {
             }
             return new ResponseEntity<JSONObject>(null);
     }
-    @GetMapping("/transfers/")
+    @GetMapping("/transfers")
     public List<Transfer> findAl(){
         return transferRepo.findAll();
     }

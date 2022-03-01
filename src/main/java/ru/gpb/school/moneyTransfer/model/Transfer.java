@@ -65,4 +65,9 @@ public class Transfer {
         result = 31 * result + (typeOfTransfer != null ? typeOfTransfer.hashCode() : 0);
         return result;
     }
+
+    @PrePersist
+    void onCreate(){
+        dateOfTransfer = LocalDateTime.now();
+    }
 }
