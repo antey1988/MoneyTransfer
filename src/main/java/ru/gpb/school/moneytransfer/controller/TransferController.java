@@ -7,7 +7,10 @@ import ru.gpb.school.moneytransfer.dto.ReplenishmentDto;
 import ru.gpb.school.moneytransfer.dto.TransferDto;
 import ru.gpb.school.moneytransfer.dto.WithdrawalDto;
 import ru.gpb.school.moneytransfer.model.Transfer;
+import ru.gpb.school.moneytransfer.service.ReplenishmentService;
 import ru.gpb.school.moneytransfer.service.TransferService;
+import ru.gpb.school.moneytransfer.service.TransferServiceImp;
+import ru.gpb.school.moneytransfer.service.WithdrawalService;
 
 import javax.transaction.Transactional;
 import java.sql.SQLException;
@@ -18,9 +21,13 @@ import java.util.List;
 public class TransferController {
 
     private final TransferService transferService;
+    private final WithdrawalService withdrawalService;
+    private final ReplenishmentService replenishmentService;
 
-    public TransferController(TransferService transferService){
+    public TransferController(TransferServiceImp transferService, WithdrawalService withdrawalService, ReplenishmentService replenishmentService){
         this.transferService = transferService;
+        this.withdrawalService = withdrawalService;
+        this.replenishmentService = replenishmentService;
     }
 
     @GetMapping("/")
@@ -49,28 +56,22 @@ public class TransferController {
 
     @Transactional(rollbackOn = {SQLException.class})
     @PostMapping("/make-transfer")
-    public int saving(@RequestBody TransferDto transferDto){
-        Transfer transfer = transferService.transferDtoToTransferEntity(transferDto);
+    public void saving(@RequestBody TransferDto transferDto){
+        Transfer transfer = transferService.dtoToTransferEntity(transferDto);
         transferService.saveTransfer(transfer);
-
-        return ExpiresFilter.XHttpServletResponse.SC_OK;
     }
 
     @Transactional(rollbackOn = {SQLException.class})
     @PostMapping("/make-withdrawal")
-    public int saving(@RequestBody WithdrawalDto withdrawalDto){
-        Transfer transfer = transferService.withdrawalDtoToTransferEntity(withdrawalDto);
+    public void saving(@RequestBody WithdrawalDto withdrawalDto){
+        Transfer transfer = withdrawalService.dtoToTransferEntity(withdrawalDto);
         transferService.saveTransfer(transfer);
-
-        return ExpiresFilter.XHttpServletResponse.SC_OK;
     }
 
     @Transactional(rollbackOn = {SQLException.class})
     @PostMapping("/make-replenishment")
-    public int saving(@RequestBody ReplenishmentDto replenishmentDto){
-        Transfer transfer = transferService.replenishmentDtoToTransferEntity(replenishmentDto);
+    public void saving(@RequestBody ReplenishmentDto replenishmentDto){
+        Transfer transfer = replenishmentService.dtoToTransferEntity(replenishmentDto);
         transferService.saveTransfer(transfer);
-
-        return ExpiresFilter.XHttpServletResponse.SC_OK;
     }
 }
