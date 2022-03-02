@@ -8,21 +8,28 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Set;
 
 
 @Data
 @Entity
 
-public class User implements UserDetails {
+public class TransferUser implements UserDetails {
     @Id
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid",strategy = "uuid")
     private String Id;
+    @Column(unique = true)
     private String userName;
     private String password;
     private String description;
     private LocalDateTime dateOfCreate;
     private LocalDateTime dateOfUpdate;
+    private boolean enable;
+    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "TransferUser_role", joinColumns = @JoinColumn(name = "Id"))
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -109,5 +116,21 @@ public class User implements UserDetails {
 
     public void setDateOfUpdate(LocalDateTime dateOfUpdate) {
         this.dateOfUpdate = dateOfUpdate;
+    }
+
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }
