@@ -7,13 +7,17 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import net.minidev.json.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import ru.gpb.school.moneyTransfer.Dto.TransferDto;
 import ru.gpb.school.moneyTransfer.exeption_handling.NoSuchTransferException;
 import ru.gpb.school.moneyTransfer.exeption_handling.TransferIncorrectData;
 import ru.gpb.school.moneyTransfer.model.Transfer;
+import ru.gpb.school.moneyTransfer.model.TransferUser;
 import ru.gpb.school.moneyTransfer.repositories.TransferRepo;
+import ru.gpb.school.moneyTransfer.repositories.TransferUserRepo;
 import ru.gpb.school.moneyTransfer.service.TransferService;
 import net.minidev.json.JSONObject;
 
@@ -27,11 +31,17 @@ public class MainController {
     @Autowired
     RestTemplate restTemplate;
     @Autowired
+    TransferUserRepo transferUserRepo;
+    @Autowired
     TransferService transferService;
 
     @PostMapping("/makeTransfer")
     public HttpStatus makeATransfer(@RequestBody TransferDto transferDto){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username =  auth.getName();
+        TransferUser user = transferUserRepo.findByUserName(username);
         Transfer transfer= transferService.makeATransfer(transferDto);
+        transfer.setTypeOfTransfer(user.getRoles().toString());
         try{
             ResponseEntity<JSONObject> theAccountExist  = requestGetToUrl("AccountService/api/thisAccountExist/"+transferDto.getSenderAccount());
             if(theAccountExist.getStatusCodeValue()<200||theAccountExist.getStatusCodeValue()>300){
@@ -72,73 +82,6 @@ public class MainController {
                 System.out.println(ex.toString());
             }
             return new ResponseEntity<JSONObject>(null);
-    }
-    @GetMapping("/transfers")
-    public List<Transfer> findAl(){
-        return transferRepo.findAll();
-    }
-
-    @GetMapping("/transfer/{Id}")
-    public Transfer getTransferById(@PathVariable String Id){
-        Optional<Transfer> transferOptional;
-        Transfer transfer = null;
-        transferOptional = transferRepo.findById(Id);
-        if(transferOptional.isPresent()){
-            throw new NoSuchTransferException("there is no transfer with id" + Id + " in database");
-        }
-        transfer = transferOptional.get();
-        return transfer;
-    }
-    @ExceptionHandler
-    public ResponseEntity<TransferIncorrectData> handleException (NoSuchTransferException noSuchTransferException){
-        TransferIncorrectData transferIncorrectData = new TransferIncorrectData(noSuchTransferException.getMessage());
-        return new ResponseEntity<>(transferIncorrectData, HttpStatus.NOT_FOUND);
-    }
-    @ExceptionHandler
-    public ResponseEntity<TransferIncorrectData> handleException(Exception exception){
-        TransferIncorrectData transferIncorrectData = new TransferIncorrectData(exception.getMessage());
-        return new ResponseEntity<>(transferIncorrectData, HttpStatus.BAD_REQUEST);
-    }
-    @GetMapping
-    public Iterable<Transfer> getTransferForQuery(@PathVariable Map<String, String> query){
-        String dataCheck = query.get("dateOfTransfer");
-        String amountCheck = query.get("amountOfMoney");
-        String senderAccountCheck = query.get("senderAccount");
-        String recipientAccountCheck = query.get("recipientAccount");
-        List<Transfer> transferList = transferRepo.findAll();
-
-        if(dataCheck!=null&&dataCheck!=""){
-            for(int i=0;i<transferList.size();i++){
-                if(!transferList.get(i).getDateOfTransfer().equals(dataCheck)){
-                    transferList.remove(i);
-                }
-            }
-        }
-
-        if(amountCheck!=null&&amountCheck!=""){
-            for(int i=0;i<transferList.size();i++){
-                if(!transferList.get(i).getAmountOfMoney().equals(amountCheck)){
-                    transferList.remove(i);
-                }
-            }
-        }
-
-        if(senderAccountCheck!=null&&senderAccountCheck!=""){
-            for(int i=0;i<transferList.size();i++){
-                if(!transferList.get(i).getSenderAccount().equals(senderAccountCheck)){
-                    transferList.remove(i);
-                }
-            }
-        }
-
-        if(recipientAccountCheck!=null&&recipientAccountCheck!=""){
-            for(int i=0;i<transferList.size();i++){
-                if(!transferList.get(i).getRecipientAccount().equals(recipientAccountCheck)){
-                    transferList.remove(i);
-                }
-            }
-        }
-        return transferList;
     }
 
 }
