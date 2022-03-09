@@ -1,7 +1,5 @@
 package ru.gpb.school.moneyTransfer.controller;
 
-
-import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import net.minidev.json.parser.JSONParser;
@@ -11,9 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-import ru.gpb.school.moneyTransfer.Dto.TransferDto;
-import ru.gpb.school.moneyTransfer.exeption_handling.NoSuchTransferException;
-import ru.gpb.school.moneyTransfer.exeption_handling.TransferIncorrectData;
+import ru.gpb.school.moneyTransfer.Dto.FullTransferDto;
 import ru.gpb.school.moneyTransfer.model.Transfer;
 import ru.gpb.school.moneyTransfer.model.TransferUser;
 import ru.gpb.school.moneyTransfer.repositories.TransferRepo;
@@ -26,17 +22,21 @@ import java.util.*;
 @RestController
 @RequestMapping("/api")
 public class MainController {
+    private TransferRepo transferRepo;
+    private RestTemplate restTemplate;
+    private TransferUserRepo transferUserRepo;
+    private TransferService transferService;
     @Autowired
-    TransferRepo transferRepo;
-    @Autowired
-    RestTemplate restTemplate;
-    @Autowired
-    TransferUserRepo transferUserRepo;
-    @Autowired
-    TransferService transferService;
+    public MainController(TransferRepo transferRepo, RestTemplate restTemplate, TransferUserRepo transferUserRepo, TransferService transferService){
+        this.transferRepo=transferRepo;
+        this.restTemplate = restTemplate;
+        this.transferUserRepo = transferUserRepo;
+        this.transferService = transferService;
+    }
+
 
     @PostMapping("/makeTransfer")
-    public HttpStatus makeATransfer(@RequestBody TransferDto transferDto){
+    public HttpStatus makeATransfer(@RequestBody FullTransferDto transferDto){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username =  auth.getName();
         TransferUser user = transferUserRepo.findByUserName(username);
