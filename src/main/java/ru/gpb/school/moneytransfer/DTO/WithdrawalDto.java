@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class WithdrawalDto {
+
     @NotNull
     private String withdrawalAccount;
     @NotNull
