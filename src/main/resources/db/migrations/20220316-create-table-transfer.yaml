@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - property:
+      name: author
+      value: o.petrov
+  - changeSet:
+      id: create_table_transfer
+      author: ${author}
+      logicalFilePath: 20220316-create-table-transfer.yaml
+      preConditions:
+          - onFail: MARK_RAN
+          - not:
+              - tableExists:
+                  schemaName: public
+                  tableName: transfer
+      changes:
+          - createTable:
+              tableName: transfer
+              columns:
+                - column: {name: id, type: bigint, autoIncrement: true, constraints: {primaryKey: true}}
+                - column: {name: sender_account, type: varchar(50)}
+                - column: {name: recipient_account, type: varchar(50)}
+                - column: {name: amount_of_money, type: float}
+                - column: {name: date_time, type: datetime}
+                - column: {name: transfer_type, type: smallint}
+

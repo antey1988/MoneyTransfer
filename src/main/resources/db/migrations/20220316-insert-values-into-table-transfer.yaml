@@ -1,0 +1,43 @@
+databaseChangeLog:
+  - property:
+      name: author
+      value: o.petrov
+  - property:
+      dbms: postgresql
+      name: date_now
+      value: now()
+  - changeSet:
+      id: insetr_values_into_table_transfer
+      author: ${author}
+      logicalFilePath: 20220316-insert-values-into-table-transfer.yaml
+      preConditions:
+          - onFail: MARK_RAN
+          - and:
+              - tableExists:
+                  tableName: transfer
+              - sqlCheck:
+                  expectedResult: 0
+                  sql: select count(*) from transfer
+      changes:
+          - insert:
+              tableName: transfer
+              columns:
+                  - column: {name: sender_account, value: 123456789}
+                  - column: {name: recipient_account, value: 123456788}
+                  - column: {name: amount_of_money, value: 9000.50}
+                  - column:
+                        name: date_time
+                        value: ${date_now}
+                  - column: {name: transfer_type, value: 0}
+          - insert:
+              tableName: transfer
+              columns:
+                  - column: {name: sender_account, value: 123456789}
+                  - column: {name: recipient_account, value: 123456787}
+                  - column: {name: amount_of_money, value: 19000.55}
+                  - column:
+                        name: date_time
+                        value: ${date_now}
+                  - column: {name: transfer_type, value: 0}
+
+

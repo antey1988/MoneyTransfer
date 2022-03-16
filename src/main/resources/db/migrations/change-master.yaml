@@ -1,0 +1,3 @@
+databaseChangeLog:
+  - include: { relativeToChangelogFile: true, file: ./20220316-create-table-transfer.yaml }
+  - include: { relativeToChangelogFile: true, file: ./20220316-insert-values-into-table-transfer.yaml }
