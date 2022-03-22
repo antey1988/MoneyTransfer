@@ -27,7 +27,7 @@ public class TransferUser implements UserDetails {
     private LocalDateTime dateOfUpdate;
     private boolean enable;
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "TransferUser_role", joinColumns = @JoinColumn(name = "Id"))
+    @CollectionTable(name = "Transfer_role", joinColumns = @JoinColumn(name = "Id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 

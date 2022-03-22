@@ -1,15 +1,11 @@
 package ru.gpb.school.moneyTransfer.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import ru.gpb.school.moneyTransfer.exeption_handling.NoSuchTransferException;
-import ru.gpb.school.moneyTransfer.exeption_handling.TransferIncorrectData;
 import ru.gpb.school.moneyTransfer.model.Transfer;
 import ru.gpb.school.moneyTransfer.repositories.TransferRepo;
-import ru.gpb.school.moneyTransfer.repositories.TransferUserRepo;
 import ru.gpb.school.moneyTransfer.service.TransferService;
 
 import java.util.*;
@@ -20,17 +16,13 @@ import java.util.*;
 public class FullDataController {
     private TransferRepo transferRepo;
     private TransferService transferService;
-    @Autowired
-    public FullDataController(TransferRepo transferRepo, TransferService transferService){
-        this.transferRepo=transferRepo;
-        this.transferService = transferService;
-    }
-    @GetMapping("/transfers")
+
+    @GetMapping("/fullData/transfers")
     public List<Transfer> findAl(){
         return transferRepo.findAll();
     }
 
-    @GetMapping("/transfers/{Id}")
+    @GetMapping("/fullData/transfers/{Id}")
     public Transfer getTransferById(@PathVariable String Id){
         Optional<Transfer> transferOptional;
         Transfer transfer = null;
@@ -42,7 +34,7 @@ public class FullDataController {
         return transfer;
     }
 
-    @GetMapping("/transfers/{query}")
+    @GetMapping("/fullData/transfers/{query}")
     public Iterable<Transfer> getTransferForQuery(@PathVariable Map<String, String> query){
         String dataCheck = query.get("dateOfTransfer");
         String amountCheck = query.get("amountOfMoney");

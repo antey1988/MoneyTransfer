@@ -1,38 +1,80 @@
 package ru.gpb.school.moneyTransfer.model;
 
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
+import org.springframework.stereotype.Service;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.PrePersist;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Getter
+@Setter
 @Entity
-@Table(name = "transfer", schema = "public", catalog = "Transfer")
+@Data
+@Builder
 public class Transfer {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    @Column(name = "Id", nullable = false)
-    private int id;
-    @Basic
-    @Column(name = "sender_account", nullable = true, precision = 0)
+    @javax.persistence.Id
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid",strategy = "uuid")
+    private int Id;
     private Long senderAccount;
-    @Basic
-    @Column(name = "recipient_account", nullable = true, precision = 0)
     private Long recipientAccount;
-    @Basic
-    @Column(name = "amount_of_money", nullable = true, precision = 0)
     private Float amountOfMoney;
-    @Basic
-    @Column(name = "date_of_transfer", nullable = true)
     private LocalDateTime dateOfTransfer;
-    @Basic
-    @Column(name = "type_of_transfer", nullable = true, length = -1)
     private String typeOfTransfer;
+
+    public int getId() {
+        return Id;
+    }
+
+    public void setId(int id) {
+        Id = id;
+    }
+
+    public Long getSenderAccount() {
+        return senderAccount;
+    }
+
+    public void setSenderAccount(Long senderAccount) {
+        this.senderAccount = senderAccount;
+    }
+
+    public Long getRecipientAccount() {
+        return recipientAccount;
+    }
+
+    public void setRecipientAccount(Long recipientAccount) {
+        this.recipientAccount = recipientAccount;
+    }
+
+    public Float getAmountOfMoney() {
+        return amountOfMoney;
+    }
+
+    public void setAmountOfMoney(Float amountOfMoney) {
+        this.amountOfMoney = amountOfMoney;
+    }
+
+    public LocalDateTime getDateOfTransfer() {
+        return dateOfTransfer;
+    }
+
+    public void setDateOfTransfer(LocalDateTime dateOfTransfer) {
+        this.dateOfTransfer = dateOfTransfer;
+    }
+
+    public String getTypeOfTransfer() {
+        return typeOfTransfer;
+    }
+
+    public void setTypeOfTransfer(String typeOfTransfer) {
+        this.typeOfTransfer = typeOfTransfer;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -41,7 +83,7 @@ public class Transfer {
 
         Transfer that = (Transfer) o;
 
-        if (id != that.id) return false;
+        if (Id != that.Id) return false;
         if (!Objects.equals(senderAccount, that.senderAccount)) return false;
         if (!Objects.equals(recipientAccount, that.recipientAccount))
             return false;
@@ -57,7 +99,7 @@ public class Transfer {
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result = Id;
         result = 31 * result + (senderAccount != null ? senderAccount.hashCode() : 0);
         result = 31 * result + (recipientAccount != null ? recipientAccount.hashCode() : 0);
         result = 31 * result + (amountOfMoney != null ? amountOfMoney.hashCode() : 0);

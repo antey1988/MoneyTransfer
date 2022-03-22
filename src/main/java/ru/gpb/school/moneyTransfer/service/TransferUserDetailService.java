@@ -7,9 +7,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 import ru.gpb.school.moneyTransfer.model.TransferUser;
 import ru.gpb.school.moneyTransfer.repositories.TransferUserRepo;
-
+@Service
 public class TransferUserDetailService implements UserDetailsService {
     @Autowired
     TransferUserRepo transferUserRepo;
