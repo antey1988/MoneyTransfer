@@ -7,6 +7,7 @@ import ru.gpb.school.moneytransfer.model.Transfer;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Repository
 public interface TransferRepo extends JpaRepository<Transfer, Long> {
 
     List<Transfer> findAllByRecipientAccount(String recipientAccount);
