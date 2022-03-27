@@ -1,0 +1,15 @@
+name: Docker Image Money Transfer
+
+on:
+  push:
+    branches: [ master ]    
+  pull_request:
+    branches: [ master ]         
+
+jobs:  
+  build:    
+    name: deploy to staging
+    runs-on: ubuntu-latest    
+    steps:
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag money-transfer:latest
