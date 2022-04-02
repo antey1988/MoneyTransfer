@@ -1,0 +1,31 @@
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: Replace
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag of image'
+        type: string
+        default: 'latest'
+        required: true
+
+jobs:
+  replace_image:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: deploy to cluster
+      uses: steebchen/kubectl@v2.0.0
+      with:
+        config: ${{ secrets.KUBE_CONFIG_DATA }}
+        version: v1.23.5
+        command: set image deployment dpl-mt-ws-spr application=antey1988/money-transfer:${{ github.event.inputs.tag }}
+    - name: verify deployment
+      uses: steebchen/kubectl@v2.0.0
+      with:
+        config: ${{ secrets.KUBE_CONFIG_DATA }}
+        version: v1.23.5
+        command: rollout status deploy dpl-mt-ws-spr
