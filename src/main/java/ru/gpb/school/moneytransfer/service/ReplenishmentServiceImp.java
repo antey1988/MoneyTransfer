@@ -14,7 +14,7 @@ public class ReplenishmentServiceImp implements ReplenishmentService{
         return Transfer.builder()
                 .amountOfMoney(replenishmentDto.getAmount())
                 .senderAccount("---")
-                .recipientAccount(replenishmentDto.getReplenishmentAccount())
+                .recipientAccount(replenishmentDto.getAccount())
                 .dateTime(LocalDateTime.now())
                 .transferType(TransferType.REPLENISHMENT)
                 .build();

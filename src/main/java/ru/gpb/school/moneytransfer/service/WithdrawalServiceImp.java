@@ -13,7 +13,7 @@ public class WithdrawalServiceImp implements WithdrawalService{
     public Transfer dtoToTransferEntity(WithdrawalDto withdrawalDto) {
         return Transfer.builder()
                 .amountOfMoney(withdrawalDto.getAmount())
-                .senderAccount(withdrawalDto.getWithdrawalAccount())
+                .senderAccount(withdrawalDto.getAccount())
                 .recipientAccount("---")
                 .dateTime(LocalDateTime.now())
                 .transferType(TransferType.WITHDRAW)

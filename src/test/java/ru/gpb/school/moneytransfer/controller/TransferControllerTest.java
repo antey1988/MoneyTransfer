@@ -42,7 +42,7 @@ class TransferControllerTest {
 
         Mockito.when(transferService.findAll()).thenReturn(expected);
 
-        MvcResult mvcResult = mockMvc.perform(get("/")).andReturn();
+        MvcResult mvcResult = mockMvc.perform(get("/transfers")).andReturn();
         MockHttpServletResponse response = mvcResult.getResponse();
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
