@@ -63,8 +63,8 @@ class TransferServiceImpTest {
     @Test
     void dtoToTransferEntity() {
         TransferDto transferDto = new TransferDto();
-        transferDto.setFrom("123456789");
-        transferDto.setTo("987654321");
+        transferDto.setSenderAccount("123456789");
+        transferDto.setRecipientAccount("987654321");
         transferDto.setAmount(100f);
 
         Transfer expected = new Transfer();

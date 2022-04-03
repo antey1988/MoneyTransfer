@@ -16,7 +16,7 @@ class ReplenishmentServiceImpTest {
 
     @Test
     void dtoToTransferEntity() {
-        replenishmentDto.setReplenishmentAccount("123456789");
+        replenishmentDto.setAccount("123456789");
         replenishmentDto.setAmount(1000f);
 
         expected.setRecipientAccount("123456789");

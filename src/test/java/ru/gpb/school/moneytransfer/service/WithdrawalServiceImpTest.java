@@ -15,7 +15,7 @@ class WithdrawalServiceImpTest {
 
     @Test
     void dtoToTransferEntity() {
-        withdrawalDto.setWithdrawalAccount("123456789");
+        withdrawalDto.setAccount("123456789");
         withdrawalDto.setAmount(1000f);
 
         expected.setRecipientAccount("---");

@@ -1,9 +1,7 @@
 package ru.gpb.school.moneytransfer.service;
 
 import org.springframework.stereotype.Service;
-import ru.gpb.school.moneytransfer.dto.ReplenishmentDto;
 import ru.gpb.school.moneytransfer.dto.TransferDto;
-import ru.gpb.school.moneytransfer.dto.WithdrawalDto;
 import ru.gpb.school.moneytransfer.model.Transfer;
 import ru.gpb.school.moneytransfer.model.type.TransferType;
 import ru.gpb.school.moneytransfer.repositories.TransferRepo;
@@ -44,8 +42,8 @@ public class TransferServiceImp implements TransferService{
     public Transfer dtoToTransferEntity(TransferDto transferDto){
         return Transfer.builder()
                 .amountOfMoney(transferDto.getAmount())
-                .senderAccount(transferDto.getFrom())
-                .recipientAccount(transferDto.getTo())
+                .senderAccount(transferDto.getSenderAccount())
+                .recipientAccount(transferDto.getRecipientAccount())
                 .dateTime(LocalDateTime.now())
                 .transferType(TransferType.TRANSFER)
                 .build();
