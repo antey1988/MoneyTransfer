@@ -24,7 +24,7 @@ public class TransferController {
     private final WithdrawalService withdrawalService;
     private final ReplenishmentService replenishmentService;
 
-    public TransferController(TransferServiceImp transferService, WithdrawalService withdrawalService, ReplenishmentService replenishmentService){
+    public TransferController(TransferService transferService, WithdrawalService withdrawalService, ReplenishmentService replenishmentService){
         this.transferService = transferService;
         this.withdrawalService = withdrawalService;
         this.replenishmentService = replenishmentService;
